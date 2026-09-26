@@ -1,0 +1,32 @@
+name: Update uSwitch
+
+# Polls uSwitch's latest release, so the uSwitch repo needs no token with
+# write access here.
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Write the cask for the latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/update-uswitch.sh
+
+      - name: Commit
+        run: |
+          [ -z "$(git status --porcelain Casks)" ] && exit 0
+          version=$(sed -n 's/^  version "\(.*\)"$/\1/p' Casks/uswitch.rb)
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Casks
+          git commit -m "uswitch $version"
+          git push
