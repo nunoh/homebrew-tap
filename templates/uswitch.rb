@@ -12,15 +12,18 @@ cask "uswitch" do
 
   app "uSwitch.app"
 
+  # uSwitch is self-signed, not notarized: without this, Gatekeeper blocks the
+  # first launch until the user approves it in System Settings.
+  postflight_steps do
+    run "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "{{appdir}}/uSwitch.app"]
+  end
+
   uninstall quit: "com.nh.uswitch"
 
   zap trash: "~/Library/Preferences/com.nh.uswitch.plist"
 
   caveats <<~EOS
-    uSwitch is ad-hoc signed and not notarized. On first launch, open
-    System Settings → Privacy & Security, click Open Anyway, then Open.
-
-    It needs Accessibility and Screen Recording permission. macOS may ask
-    again after an upgrade.
+    uSwitch needs Accessibility and Screen Recording permission. Grant both
+    in System Settings → Privacy & Security on first launch.
   EOS
 end
