@@ -1,6 +1,6 @@
 cask "uswitch" do
-  version "0.3.0"
-  sha256 "f3394f883574a847ba226800dc36ac0d53246b1c4e3596761d7af2a0e061ab7c"
+  version "0.3.1"
+  sha256 "660d36ff34966ae44b88427acab8773db726d076e55c4f9a698c6083367d7e0f"
 
   url "https://github.com/nunoh/uSwitch/releases/download/v#{version}/uSwitch-v#{version}-arm64.dmg"
   name "uSwitch"
